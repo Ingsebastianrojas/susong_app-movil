@@ -3,7 +3,8 @@ import { View, TouchableOpacity, StyleSheet, Image } from 'react-native';
 import { Provider as PaperProvider } from 'react-native-paper';
 
 import Navbar from './components/Navbar';
-import Login from './pages/login';
+import Login from './pages/Login';
+import Register from './pages/Register';
 import Home from './pages/Home';
 import Pedidos from './pages/pedidos';
 import Config from './pages/Config';
@@ -11,44 +12,36 @@ import Menu from './pages/Menu';
 
 export default function App() {
 
-  //  ESTADOS GLOBALES
   const [user, setUser] = useState(null);
   const [carrito, setCarrito] = useState([]);
   const [pedidos, setPedidos] = useState([]);
 
-  const [screen, setScreen] = useState('home'); // 
+  const [screen, setScreen] = useState('Login');
   const [darkMode, setDarkMode] = useState(false);
   const [category, setCategory] = useState(null);
 
   const theme = darkMode ? darkTheme : lightTheme;
 
-  //  RENDER PRINCIPAL
   const renderScreen = () => {
 
-    //  SI NO HAY USUARIO → LOGIN
     if (!user) {
       return <Login setUser={setUser} setScreen={setScreen} />;
     }
 
     switch (screen) {
       case 'home':
-        return (
-          <Home 
-            theme={theme} 
-            setScreen={setScreen} 
-            setCategory={setCategory}
-          />
-        );
+        return <Home theme={theme} setScreen={setScreen} />;
 
       case 'menu':
         return (
           <Menu 
             theme={theme} 
-            category={category}
             carrito={carrito}
             setCarrito={setCarrito}
           />
         );
+        case 'register':
+  return <Register setScreen={setScreen} />;
 
       case 'pedidos':
         return (
@@ -58,8 +51,8 @@ export default function App() {
             setCarrito={setCarrito}
             pedidos={pedidos}
             setPedidos={setPedidos}
-            user={user}   
-           />
+            user={user}
+          />
         );
 
       case 'config':
@@ -74,12 +67,10 @@ export default function App() {
     <PaperProvider>
       <View style={[styles.container, theme.container]}>
 
-        {/* CONTENIDO */}
         <View style={styles.content}>
           {renderScreen()}
         </View>
 
-        {/*  BOTÓN DARK MODE  */}
         {user && (
           <TouchableOpacity
             style={[
@@ -99,7 +90,6 @@ export default function App() {
           </TouchableOpacity>
         )}
 
-        {/*  NAVBAR SOLO SI HAY USUARIO */}
         {user && <Navbar setScreen={setScreen} theme={theme} />}
 
       </View>
@@ -107,29 +97,24 @@ export default function App() {
   );
 }
 
-/*  TEMAS */
 const lightTheme = {
   container: { backgroundColor: '#fff' },
-  navbar: { backgroundColor: '#ddd' },
   text: { color: '#000', fontSize: 16 },
 };
 
 const darkTheme = {
   container: { backgroundColor: '#121212' },
-  navbar: { backgroundColor: '#1e1e1e' },
   text: { color: '#fff', fontSize: 16 },
 };
 
-/*  ESTILOS */
 const styles = StyleSheet.create({
   container: {
     flex: 1
   },
 
+  //  AQUÍ ESTABA EL ERROR
   content: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    flex: 1
   },
 
   darkButton: {
@@ -146,4 +131,4 @@ const styles = StyleSheet.create({
     height: 40,
     borderRadius: 20,
   },
-});
+    });
